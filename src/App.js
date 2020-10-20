@@ -1,10 +1,16 @@
-import './App.css';
+import 'materialize-css/dist/css/materialize.min.css';
 
-import React from 'react';
-import logo from './logo.svg';
+import React, { useState } from 'react';
+
+import Form from './components/Form.js';
 
 function App() {
-  return <div className="App"></div>;
+  const [articles, setArticles] = useState([]);
+  return (
+    <div className="App">
+      <Form articles={articles} />
+    </div>
+  );
 }
 
 export default App;
