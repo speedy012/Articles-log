@@ -1,32 +1,16 @@
 import React, { useState } from 'react';
 
-const Form = (props) => {
-  const initialInputState = { title: '', writer: '', body: '' };
-  const [eachEntry, setEachEntry] = useState(initialInputState);
-  const { title, writer, body } = eachEntry;
+import { Redirect } from 'react-router-dom';
 
-  const postArticle = (newArticle) => {
-    fetch('http://localhost:3000/new', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Accept: 'application/json',
-      },
-      body: JSON.stringify({
-        title: newArticle.title,
-        author: newArticle.name,
-        body: newArticle.body,
-      }),
-    })
-      .then((res) => res.json())
-      .then((newArticle) => {
-        props.setArticles([...props.article, newArticle]);
-      });
-  };
+const Form = (props) => {
+  const initialInputState = { title: '', writer: '', description: '' };
+  const [eachEntry, setEachEntry] = useState(initialInputState);
+  const { title, writer, description } = eachEntry;
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    postArticle(eachEntry);
+    props.postArticle(eachEntry);
+    props.history.push('/');
   };
 
   const handleInputChange = (e) => {
@@ -34,7 +18,7 @@ const Form = (props) => {
   };
 
   return (
-    <div className="Form">
+    <div className="form">
       <form onSubmit={handleSubmit}>
         <label>
           Article Title:
@@ -58,12 +42,14 @@ const Form = (props) => {
           Body:
           <input
             type="text"
-            name="body"
-            value={body}
+            name="description"
+            value={description}
             onChange={handleInputChange}
           />
         </label>
-        <button type="submit" value="Submit" />
+        <button className="form-btn" type="submit" value="Submit">
+          Submit
+        </button>
       </form>
     </div>
   );
