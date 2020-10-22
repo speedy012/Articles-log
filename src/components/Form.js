@@ -1,7 +1,5 @@
 import React, { useState } from 'react';
 
-import { Redirect } from 'react-router-dom';
-
 const Form = (props) => {
   const initialInputState = { title: '', writer: '', description: '' };
   const [eachEntry, setEachEntry] = useState(initialInputState);

@@ -2,14 +2,15 @@ import 'materialize-css/dist/css/materialize.min.css';
 import './App.css';
 
 import React, { useEffect, useState } from 'react';
-import { Route, BrowserRouter as Router, Switch } from 'react-router-dom';
+import { Route, Switch } from 'react-router-dom';
 
 import Form from './components/Form.js';
 import Home from './components/Home';
 import Nav from './components/Nav';
 
-function App() {
+function App(props) {
   const [articles, setArticles] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   const postArticle = (newArticle) => {
     fetch('http://localhost:3000/articles', {
@@ -53,14 +54,9 @@ function App() {
     });
   };
 
-  const updateTitle = (e, articleId) => {
-    console.log(articles);
-    console.log(articleId);
-    console.log('e', e);
-    console.log('nt', articleId);
-
+  const updateTitle = (e, article) => {
     let newTitle = e;
-    let id = articleId;
+    let id = article._id;
 
     fetch(`http://localhost:3000/articles/${id}`, {
       method: 'PATCH',
@@ -70,13 +66,14 @@ function App() {
       },
       body: JSON.stringify({
         title: newTitle,
+        author: article.author,
+        description: article.description,
       }),
     })
       .then((res) => res.json())
       .then((data) => {
+        console.log(data);
         let newUpdatedTitle = articles.map((oldTitle) => {
-          console.log(oldTitle._id);
-          console.log(id);
           if (oldTitle._id === id) {
             return data;
           } else {
@@ -88,8 +85,66 @@ function App() {
       .catch((err) => console.error(err));
   };
 
-  const updateAuthor = (e) => {
-    console.log(e.target.value);
+  const updateAuthor = (e, article) => {
+    let newAuthor = e;
+    let id = article._id;
+
+    fetch(`http://localhost:3000/articles/${id}`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+      },
+      body: JSON.stringify({
+        title: article.title,
+        author: newAuthor,
+        description: article.description,
+      }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data);
+        let newUpdatedAuthor = articles.map((oldAuthor) => {
+          if (oldAuthor._id === id) {
+            return data;
+          } else {
+            return oldAuthor;
+          }
+        });
+        setArticles([...newUpdatedAuthor]);
+      })
+      .catch((err) => console.error(err));
+  };
+
+  const updateDescription = (e, article) => {
+    let newDescription = e;
+    let id = article._id;
+
+    fetch(`http://localhost:3000/articles/${id}`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+      },
+      body: JSON.stringify({
+        title: article.title,
+        author: article.author,
+        description: newDescription,
+      }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data);
+        let newUpdatedDesc = articles.map((oldDesc) => {
+          if (oldDesc._id === id) {
+            return data;
+          } else {
+            return oldDesc;
+          }
+        });
+        setArticles([...newUpdatedDesc]);
+      })
+      .catch((err) => console.error(err));
   };
 
   useEffect(() => {
@@ -100,37 +155,35 @@ function App() {
     })();
   }, []);
 
-  console.log(articles);
-
   return (
     <>
-      <Router>
-        <div className="App">
-          <Nav />
-          <Switch>
-            <Route
-              exact
-              path="/create"
-              render={(props) => {
-                return <Form postArticle={postArticle} {...props} />;
-              }}
-            />
-            <Route
-              exact
-              path="/"
-              render={(props) => {
-                return (
-                  <Home
-                    articles={articles}
-                    removeArticle={removeArticle}
-                    updateTitle={updateTitle}
-                  />
-                );
-              }}
-            />
-          </Switch>
-        </div>
-      </Router>
+      <div className="App">
+        <Nav />
+        <Switch>
+          <Route
+            exact
+            path="/create"
+            render={(props) => {
+              return <Form postArticle={postArticle} {...props} />;
+            }}
+          />
+          <Route
+            exact
+            path="/"
+            render={(props) => {
+              return (
+                <Home
+                  articles={articles}
+                  removeArticle={removeArticle}
+                  updateTitle={updateTitle}
+                  updateAuthor={updateAuthor}
+                  updateDescription={updateDescription}
+                />
+              );
+            }}
+          />
+        </Switch>
+      </div>
     </>
   );
 }

@@ -17,15 +17,6 @@ const ArticleCard = (props) => {
     setIsOpen(false);
   };
 
-  const save = (value) => {
-    alert(value);
-  };
-  // const cancel = () => {
-  //   alert('Cancelled');
-  // };
-
-  const [editMode, setEditMode] = useState(false);
-
   // const deleteArticleFromList = () => {
   //   const { removeArticle, article } = props;
   //   removeArticle(article);
@@ -54,7 +45,7 @@ const ArticleCard = (props) => {
           <EasyEdit
             type={Types.TEXT}
             value={props.article.title}
-            onSave={(e) => props.updateTitle(e, props.article._id)}
+            onSave={(e) => props.updateTitle(e, props.article)}
           />
         </h2>
         <h4>
@@ -62,14 +53,14 @@ const ArticleCard = (props) => {
           <EasyEdit
             type={Types.TEXT}
             value={props.article.author}
-            onSave={save}
+            onSave={(e) => props.updateAuthor(e, props.article)}
           />
         </h4>
         <p>
           <EasyEdit
             type={Types.TEXTAREA}
             value={props.article.description}
-            onSave={save}
+            onSave={(e) => props.updateDescription(e, props.article)}
           />
         </p>
         <button className="modal-btn" onClick={closeModal}>

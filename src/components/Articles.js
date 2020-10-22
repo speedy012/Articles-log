@@ -14,6 +14,8 @@ const Articles = (props) => {
                   article={article}
                   removeArticle={props.removeArticle}
                   updateTitle={props.updateTitle}
+                  updateAuthor={props.updateAuthor}
+                  updateDescription={props.updateDescription}
                 />
               );
             })}
