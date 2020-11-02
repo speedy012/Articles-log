@@ -84,3 +84,9 @@
   min-height: 500px;
   margin: 0 auto;
 }
+
+h3 {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
